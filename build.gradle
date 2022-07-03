@@ -19,6 +19,7 @@ dependencies {
 	implementation 'org.flywaydb:flyway-core'
 	implementation 'com.googlecode.flyway:flyway-gradle-plugin:2.3.1'
 	implementation 'org.hamcrest:hamcrest-core:2.2'
+	implementation 'com.h2database:h2:2.1.212'
 	runtimeOnly 'org.postgresql:postgresql'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }

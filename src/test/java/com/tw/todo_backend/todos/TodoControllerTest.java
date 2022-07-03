@@ -33,7 +33,7 @@ public class TodoControllerTest {
 
     @Test
     void shouldGetAllTodos() throws Exception {
-        List<Todo> toDoList = new ArrayList<Todo>();
+        List<Todo> toDoList = new ArrayList<>();
         toDoList.add(new Todo(1L, "Eat thrice", true));
         toDoList.add(new Todo(2L, "Sleep Twice", true));
         when(toDoService.getAllTodos()).thenReturn(toDoList);

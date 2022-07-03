@@ -16,7 +16,7 @@ import static org.hamcrest.Matchers.is;
 @SpringBootTest
 public class TodoRepositoryTest {
 
-    private final List<Todo> mockTodos = new ArrayList<Todo>(
+    private final List<Todo> mockTodos = new ArrayList<>(
             List.of(
                     new Todo("Eat thrice", true),
                     new Todo("Sleep Twice", true)

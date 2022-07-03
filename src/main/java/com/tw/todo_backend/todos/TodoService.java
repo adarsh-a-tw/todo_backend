@@ -8,7 +8,7 @@ import java.util.Optional;
 
 @Service
 public class TodoService {
-    private TodoRepository todoRepository;
+    private final TodoRepository todoRepository;
 
     public TodoService(TodoRepository todoRepository) {
         this.todoRepository = todoRepository;
@@ -31,12 +31,8 @@ public class TodoService {
     }
 
     public Todo updateTodo(Todo todo, long id) throws TodoNotFoundException {
-        Optional<Todo> todoOptional = todoRepository.findById(id);
-        if (todoOptional.isPresent()) {
-            Todo fetchedTodo = todoOptional.get();
-            todo.setId(fetchedTodo.getId());
-            return todoRepository.save(todo);
-        }
-        throw new TodoNotFoundException(id);
+        Todo fetchedTodo = getTodo(id);
+        todo.setId(fetchedTodo.getId());
+        return todoRepository.save(todo);
     }
 }

@@ -22,7 +22,7 @@ public class TodoServiceTest {
 
     @Test
     public void shouldGetAllTodos() {
-        List<Todo> toDoList = new ArrayList<Todo>();
+        List<Todo> toDoList = new ArrayList<>();
         toDoList.add(new Todo(1L, "Eat thrice", true));
         toDoList.add(new Todo(2L, "Sleep Twice", true));
         when(todoRepository.findAll()).thenReturn(toDoList);
@@ -59,7 +59,6 @@ public class TodoServiceTest {
     @Test
     public void shouldRaiseExceptionWhenTryingToFetchTodoThatDoesNotExist() {
         long id = 1;
-        Todo todo = new Todo(2, "Example Todo", false);
         when(todoRepository.findById(id)).thenReturn(Optional.empty());
         TodoService todoService = new TodoService(todoRepository);
 
@@ -71,6 +70,7 @@ public class TodoServiceTest {
         long id = 1;
         Todo todo = new Todo(id, "Example Todo", false);
         when(todoRepository.save(todo)).thenReturn(todo);
+        when(todoRepository.findById(id)).thenReturn(Optional.of(todo));
         TodoService todoService = new TodoService(todoRepository);
 
         Todo updatedTodo = todoService.updateTodo(todo,id);

@@ -33,4 +33,13 @@ public class TodoController {
             throw new ResponseStatusException(exception.getStatus(), exception.getMessage(), exception);
         }
     }
+
+    @RequestMapping(value = "/todos/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<Todo> updateTodo(@PathVariable long id, @RequestBody Todo todo) {
+        try {
+            return new ResponseEntity<>(this.todoService.updateTodo(todo, id), HttpStatus.ACCEPTED);
+        } catch (GenericException exception) {
+            throw new ResponseStatusException(exception.getStatus(), exception.getMessage(), exception);
+        }
+    }
 }

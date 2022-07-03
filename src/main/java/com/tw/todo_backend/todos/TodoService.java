@@ -29,4 +29,14 @@ public class TodoService {
         }
         throw new TodoNotFoundException(id);
     }
+
+    public Todo updateTodo(Todo todo, long id) throws TodoNotFoundException {
+        Optional<Todo> todoOptional = todoRepository.findById(id);
+        if (todoOptional.isPresent()) {
+            Todo fetchedTodo = todoOptional.get();
+            todo.setId(fetchedTodo.getId());
+            return todoRepository.save(todo);
+        }
+        throw new TodoNotFoundException(id);
+    }
 }

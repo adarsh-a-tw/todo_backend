@@ -65,4 +65,26 @@ public class TodoServiceTest {
 
         assertThrows(TodoNotFoundException.class,()->todoService.getTodo(id));
     }
+
+    @Test
+    public void shouldUpdateTodoGivenId() throws TodoNotFoundException {
+        long id = 1;
+        Todo todo = new Todo(id, "Example Todo", false);
+        when(todoRepository.save(todo)).thenReturn(todo);
+        TodoService todoService = new TodoService(todoRepository);
+
+        Todo updatedTodo = todoService.updateTodo(todo,id);
+
+        assertThat(updatedTodo, is(todo));
+    }
+
+    @Test
+    public void shouldRaiseExceptionWhenTryingToUpdateTodoThatDoesNotExist() {
+        long id = 1;
+        Todo todo = new Todo(2, "Example Todo", false);
+        when(todoRepository.findById(id)).thenReturn(Optional.empty());
+        TodoService todoService = new TodoService(todoRepository);
+
+        assertThrows(TodoNotFoundException.class,()->todoService.updateTodo(todo,id));
+    }
 }

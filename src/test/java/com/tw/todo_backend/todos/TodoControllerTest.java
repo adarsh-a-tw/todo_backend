@@ -80,4 +80,32 @@ public class TodoControllerTest {
 
         result.andExpect(status().isBadRequest());
     }
+
+    @Test
+    void shouldUpdateTodo() throws Exception{
+        long id = 1L;
+        Todo sampleTodo = new Todo(id, "Sample Todo", false);
+        when(this.toDoService.updateTodo(sampleTodo,id)).thenReturn(sampleTodo);
+        ObjectMapper objectMapper = new ObjectMapper();
+        String todoJson = objectMapper.writeValueAsString(sampleTodo);
+
+        ResultActions result = mockMvc.perform(MockMvcRequestBuilders.put(String.format("/todos/%s",id))
+                .contentType(MediaType.APPLICATION_JSON).content(todoJson));
+
+        result.andExpect(status().isAccepted()).andExpect(jsonPath("$").value(sampleTodo));
+    }
+
+    @Test
+    void shouldRespondWithBadRequestWhenTryingToUpdateTodoWithInvalidId() throws Exception {
+        long id = 100000L;
+        Todo sampleTodo = new Todo(1L, "Sample Todo", false);
+        when(this.toDoService.updateTodo(sampleTodo,id)).thenThrow(new TodoNotFoundException(id));
+        ObjectMapper objectMapper = new ObjectMapper();
+        String todoJson = objectMapper.writeValueAsString(sampleTodo);
+
+        ResultActions result = mockMvc.perform(MockMvcRequestBuilders.put(String.format("/todos/%s", id))
+                .contentType(MediaType.APPLICATION_JSON).content(todoJson));
+
+        result.andExpect(status().isBadRequest());
+    }
 }

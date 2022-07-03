@@ -63,9 +63,6 @@ public class TodoRepositoryTest {
 
     @Test
     public void shouldReturnEmptyForInvalidId() {
-        Todo todo = new Todo("Example todo", false);
-        Todo savedTodo = todoRepository.save(todo);
-
         Optional<Todo> optionalTodo = todoRepository.findById(1000000L);
 
         assertThat(optionalTodo.isEmpty(), is(true));

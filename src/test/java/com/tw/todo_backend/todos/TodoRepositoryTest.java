@@ -37,6 +37,7 @@ public class TodoRepositoryTest {
     @Test
     public void getAllTodos() {
         List<Todo> todoList = todoRepository.findAll();
+
         assertThat(todoList, is(this.mockTodos));
     }
 

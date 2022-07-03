@@ -37,9 +37,11 @@ public class TodoControllerTest {
         toDoList.add(new Todo(2L, "Sleep Twice", true));
         when(toDoService.getAllTodos()).thenReturn(toDoList);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/todos")
+        ResultActions result = mockMvc.perform(MockMvcRequestBuilders.get("/todos")
                 .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(jsonPath("$", hasSize(2)));
+        );
+
+        result.andExpect(jsonPath("$", hasSize(2)));
     }
 
     @Test

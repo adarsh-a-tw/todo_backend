@@ -42,4 +42,14 @@ public class TodoController {
             throw new ResponseStatusException(exception.getStatus(), exception.getMessage(), exception);
         }
     }
+
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    @RequestMapping(value = "/todos/{id}", method = RequestMethod.DELETE)
+    public void deleteTodo(@PathVariable long id) {
+        try {
+            this.todoService.deleteTodo(id);
+        } catch (GenericException exception) {
+            throw new ResponseStatusException(exception.getStatus(), exception.getMessage(), exception);
+        }
+    }
 }

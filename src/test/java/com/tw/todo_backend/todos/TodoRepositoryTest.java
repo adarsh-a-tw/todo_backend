@@ -67,4 +67,14 @@ public class TodoRepositoryTest {
 
         assertThat(optionalTodo.isEmpty(), is(true));
     }
+
+    @Test
+    public void shouldDeleteTodo() {
+        Todo todo = new Todo("Example todo", false);
+        todo = todoRepository.save(todo);
+
+        todoRepository.delete(todo);
+
+        assertThat(todoRepository.findById(todo.getId()), is(Optional.empty()));
+    }
 }

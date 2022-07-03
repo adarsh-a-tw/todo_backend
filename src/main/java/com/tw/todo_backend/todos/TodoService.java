@@ -35,4 +35,9 @@ public class TodoService {
         todo.setId(fetchedTodo.getId());
         return todoRepository.save(todo);
     }
+
+    public void deleteTodo(long id) throws TodoNotFoundException {
+        Todo fetchedTodo = getTodo(id);
+        todoRepository.delete(fetchedTodo);
+    }
 }

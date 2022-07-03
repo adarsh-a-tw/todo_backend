@@ -1,7 +1,10 @@
 package com.tw.todo_backend.todos;
 
 import com.tw.todo_backend.todos.exceptions.TodoNotFoundException;
+import org.hamcrest.core.Is;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
@@ -12,13 +15,19 @@ import java.util.Optional;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 public class TodoServiceTest {
 
     @MockBean
     private TodoRepository todoRepository;
+
+    @Captor
+    ArgumentCaptor<Todo> todoArgumentCaptor;
+
+    @Captor
+    ArgumentCaptor<Long> idArgumentCaptor;
 
     @Test
     public void shouldGetAllTodos() {
@@ -62,7 +71,7 @@ public class TodoServiceTest {
         when(todoRepository.findById(id)).thenReturn(Optional.empty());
         TodoService todoService = new TodoService(todoRepository);
 
-        assertThrows(TodoNotFoundException.class,()->todoService.getTodo(id));
+        assertThrows(TodoNotFoundException.class, () -> todoService.getTodo(id));
     }
 
     @Test
@@ -73,7 +82,7 @@ public class TodoServiceTest {
         when(todoRepository.findById(id)).thenReturn(Optional.of(todo));
         TodoService todoService = new TodoService(todoRepository);
 
-        Todo updatedTodo = todoService.updateTodo(todo,id);
+        Todo updatedTodo = todoService.updateTodo(todo, id);
 
         assertThat(updatedTodo, is(todo));
     }
@@ -85,6 +94,30 @@ public class TodoServiceTest {
         when(todoRepository.findById(id)).thenReturn(Optional.empty());
         TodoService todoService = new TodoService(todoRepository);
 
-        assertThrows(TodoNotFoundException.class,()->todoService.updateTodo(todo,id));
+        assertThrows(TodoNotFoundException.class, () -> todoService.updateTodo(todo, id));
+    }
+
+    @Test
+    public void shouldDeleteTodoGivenId() throws TodoNotFoundException {
+        long id = 10;
+        Todo todo = new Todo(id, "Example Todo", false);
+        when(todoRepository.findById(id)).thenReturn(Optional.of(todo));
+        TodoService todoService = new TodoService(todoRepository);
+
+        todoService.deleteTodo(id);
+
+        verify(this.todoRepository, times(1)).findById(idArgumentCaptor.capture());
+        verify(this.todoRepository, times(1)).delete(todoArgumentCaptor.capture());
+        assertThat(todoArgumentCaptor.getValue(), Is.is(todo));
+        assertThat(idArgumentCaptor.getValue(), Is.is(id));
+    }
+
+    @Test
+    public void shouldRaiseExceptionWhenTryingToDeleteTodoThatDoesNotExist() {
+        long id = 100000L;
+        when(todoRepository.findById(id)).thenReturn(Optional.empty());
+        TodoService todoService = new TodoService(todoRepository);
+
+        assertThrows(TodoNotFoundException.class, () -> todoService.deleteTodo(id));
     }
 }

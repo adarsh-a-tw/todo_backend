@@ -1,6 +1,7 @@
 package com.tw.todo_backend.todos;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tw.todo_backend.todos.exceptions.TodoNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,8 +53,31 @@ public class TodoControllerTest {
         String todoJson = objectMapper.writeValueAsString(todo);
 
         ResultActions result = mockMvc.perform(MockMvcRequestBuilders.post("/todos")
-                               .contentType(MediaType.APPLICATION_JSON).content(todoJson));
+                .contentType(MediaType.APPLICATION_JSON).content(todoJson));
 
         result.andExpect(status().isCreated()).andExpect(jsonPath("$").value(todo));
+    }
+
+    @Test
+    void shouldGetTodoGivenId() throws Exception {
+        long id = 1L;
+        Todo sampleTodo = new Todo(id, "Sample Todo", false);
+        when(this.toDoService.getTodo(id)).thenReturn(sampleTodo);
+
+        ResultActions result = mockMvc.perform(MockMvcRequestBuilders.get(String.format("/todos/%s", id))
+                .contentType(MediaType.APPLICATION_JSON));
+
+        result.andExpect(jsonPath("$").value(sampleTodo));
+    }
+
+    @Test
+    void shouldRespondWithBadRequestWhenTryingToFetchTodoWithInvalidId() throws Exception {
+        long id = 100000L;
+        when(this.toDoService.getTodo(id)).thenThrow(new TodoNotFoundException(id));
+
+        ResultActions result = mockMvc.perform(MockMvcRequestBuilders.get(String.format("/todos/%s", id))
+                .contentType(MediaType.APPLICATION_JSON));
+
+        result.andExpect(status().isBadRequest());
     }
 }

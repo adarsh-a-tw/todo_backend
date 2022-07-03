@@ -1,8 +1,10 @@
 package com.tw.todo_backend.todos;
 
+import com.tw.todo_backend.todos.exceptions.TodoNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TodoService {
@@ -18,5 +20,13 @@ public class TodoService {
 
     public Todo createTodo(Todo todo) {
         return todoRepository.save(todo);
+    }
+
+    public Todo getTodo(long id) throws TodoNotFoundException {
+        Optional<Todo> todoOptional = todoRepository.findById(id);
+        if (todoOptional.isPresent()) {
+            return todoOptional.get();
+        }
+        throw new TodoNotFoundException(id);
     }
 }

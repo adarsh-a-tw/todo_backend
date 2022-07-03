@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -35,18 +36,38 @@ public class TodoRepositoryTest {
     }
 
     @Test
-    public void getAllTodos() {
+    public void shouldGetAllTodos() {
         List<Todo> todoList = todoRepository.findAll();
 
         assertThat(todoList, is(this.mockTodos));
     }
 
     @Test
-    public void saveTodo() {
+    public void shouldSaveTodo() {
         Todo todo = new Todo("Example todo", false);
 
         Todo savedTodo = todoRepository.save(todo);
 
         assertThat(savedTodo, is(todo));
+    }
+
+    @Test
+    public void shouldGetTodoForValidId() {
+        Todo todo = new Todo("Example todo", false);
+        Todo savedTodo = todoRepository.save(todo);
+
+        Todo fetchedTodo = todoRepository.findById(savedTodo.getId()).get();
+
+        assertThat(fetchedTodo, is(savedTodo));
+    }
+
+    @Test
+    public void shouldReturnEmptyForInvalidId() {
+        Todo todo = new Todo("Example todo", false);
+        Todo savedTodo = todoRepository.save(todo);
+
+        Optional<Todo> optionalTodo = todoRepository.findById(1000000L);
+
+        assertThat(optionalTodo.isEmpty(), is(true));
     }
 }

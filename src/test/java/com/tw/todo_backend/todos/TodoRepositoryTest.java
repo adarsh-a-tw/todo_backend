@@ -39,4 +39,13 @@ public class TodoRepositoryTest {
         List<Todo> todoList = todoRepository.findAll();
         assertThat(todoList, is(this.mockTodos));
     }
+
+    @Test
+    public void saveTodo() {
+        Todo todo = new Todo("Example todo", false);
+
+        Todo savedTodo = todoRepository.save(todo);
+
+        assertThat(savedTodo, is(todo));
+    }
 }

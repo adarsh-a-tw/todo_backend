@@ -29,4 +29,15 @@ public class TodoServiceTest {
 
         assertThat(allTodos, is(toDoList));
     }
+
+    @Test
+    public void shouldCreateTodo() {
+        Todo todo = new Todo("Example Todo", false);
+        when(todoRepository.save(todo)).thenReturn(todo);
+        TodoService todoService = new TodoService(todoRepository);
+
+        Todo createdTodo = todoService.createTodo(todo);
+
+        assertThat(createdTodo, is(todo));
+    }
 }

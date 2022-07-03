@@ -17,8 +17,8 @@ public class TodoRepositoryTest {
 
     private final List<Todo> mockTodos = new ArrayList<Todo>(
             List.of(
-                    new Todo(1L, "Eat thrice", true),
-                    new Todo(2L, "Sleep Twice", true)
+                    new Todo("Eat thrice", true),
+                    new Todo("Sleep Twice", true)
             ));
 
     @Autowired

@@ -3,4 +3,6 @@ fileignoreconfig:
   checksum: fd6fd8002edc4cbee9d40251dc14e3bdcc19f69717679d6fa790d58a00e87a83
 - filename: src/main/resources/db/migration/V1.1__Create_Todo_Table.sql
   checksum: 8e348931f049da451cab6deebf86c10ecdb545a60e51c4b4731f30b6919f3dfe
+- filename: src/main/resources/db/migration/V1.2__Create_Hibernate_Sequence.sql
+  checksum: 49c2000e9da96e7d3bb062cac3ef5b0ad471afd9bc2b603e37c346e54146420c
 version: "1"
